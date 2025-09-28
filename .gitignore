@@ -6,3 +6,6 @@ vendor
 
 # go executable built file
 smtp2http
+
+# Environment variables
+.env

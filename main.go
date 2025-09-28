@@ -85,7 +85,20 @@ func main() {
 				})
 			}
 
-			resp, err := resty.New().R().SetHeader("Content-Type", "application/json").SetBody(jsonData).Post(*flagWebhook)
+			var payload interface{}
+			if *flagPostmark {
+				payload = convertToPostmarkFormat(&jsonData)
+			} else {
+				payload = jsonData
+			}
+
+			request := resty.New().R().SetHeader("Content-Type", "application/json").SetBody(payload)
+
+			if *flagPostmark && *flagPostmarkToken != "" {
+				request.SetHeader("X-Postmark-Server-Token", *flagPostmarkToken)
+			}
+
+			resp, err := request.Post(*flagWebhook)
 			if err != nil {
 				log.Println(err)
 				return errors.New("E1: Cannot accept your message due to internal error, please report that to our engineers")
