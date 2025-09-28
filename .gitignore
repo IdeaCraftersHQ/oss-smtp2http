@@ -2,6 +2,7 @@ bin
 .DS_Store
 
 vendor
+.idea
 
 # go executable built file
 smtp2http
